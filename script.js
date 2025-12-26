@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("contactForm");
   const status = document.getElementById("status");
+  const fileInput = document.getElementById("file");
 
   if (!form) {
     console.error("contactForm not found");
@@ -16,6 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const formData = new FormData(form);
+
+    // ✅ REMOVE empty file field if no file was selected
+    if (fileInput && fileInput.files.length === 0) {
+      formData.delete("file");
+    }
 
     try {
       const response = await fetch(
