@@ -1,57 +1,40 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("contactForm");
-  const status = document.getElementById("status");
-  const fileInput = document.getElementById("file");
+const form = document.getElementById("contactForm");
+const statusEl = document.getElementById("status");
 
-  if (!form) {
-    console.error("contactForm not found");
-    return;
+// ✅ LIVE BACKEND URL
+const API_URL = "https://nulleinstech-api.onrender.com/contact";
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  statusEl.textContent = "Sending...";
+
+  const formData = new FormData(form);
+
+  // ✅ IMPORTANT FIX:
+  // Remove empty file field so backend doesn't reject it
+  const fileInput = document.getElementById("file");
+  if (fileInput && fileInput.files.length === 0) {
+    formData.delete("file");
   }
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      body: formData
+    });
 
-    if (status) {
-      status.textContent = "Sending...";
-      status.className = "status sending";
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.detail || "Submission failed");
     }
 
-    const formData = new FormData(form);
-
-    // ✅ REMOVE empty file field if no file was selected
-    if (fileInput && fileInput.files.length === 0) {
-      formData.delete("file");
-    }
-
-    try {
-      const response = await fetch(
-        "https://nulleinstech-api.onrender.com/contact",
-        {
-          method: "POST",
-          body: formData
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || "Submission failed");
-      }
-
-      if (status) {
-        status.textContent =
-          "Thank you! Your message has been received. We will contact you shortly.";
-        status.className = "status success";
-      }
-
-      form.reset();
-    } catch (error) {
-      console.error(error);
-      if (status) {
-        status.textContent =
-          error.message || "Something went wrong. Please try again later.";
-        status.className = "status error";
-      }
-    }
-  });
+    statusEl.textContent =
+      "Thank you! Your message has been received. The NullEinsTech team will contact you shortly.";
+    form.reset();
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent =
+      err.message || "Something went wrong. Please try again later.";
+  }
 });
