@@ -1,4 +1,3 @@
-alert("script.js is running");
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("contactForm");
   const status = document.getElementById("status");
@@ -9,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   form.addEventListener("submit", async (event) => {
-    event.preventDefault(); // 🔴 THIS STOPS THE RELOAD
+    event.preventDefault();
 
     if (status) {
       status.textContent = "Sending...";
@@ -50,4 +49,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
