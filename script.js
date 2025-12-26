@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("#contact-form");
-  const submitBtn = document.querySelector("#submit-btn");
+  const form = document.getElementById("contact-form");
+  const submitBtn = document.getElementById("submit-btn");
 
   if (!form || !submitBtn) {
     console.error("Form or submit button not found");
@@ -13,27 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.disabled = true;
     submitBtn.textContent = "Sending...";
 
-    const formData = new FormData();
-
-    formData.append("full_name", document.querySelector("#full_name").value);
-    formData.append("email", document.querySelector("#email").value);
-    formData.append("phone", document.querySelector("#phone").value);
-    formData.append("company", document.querySelector("#company").value);
-    formData.append("subject", document.querySelector("#subject").value);
-    formData.append("message", document.querySelector("#message").value);
-
-    const preferred = document.querySelector(
-      'input[name="preferred_contact"]:checked'
-    );
-    formData.append(
-      "preferred_contact",
-      preferred ? preferred.value : "email"
-    );
-
-    const fileInput = document.querySelector("#file");
-    if (fileInput && fileInput.files.length > 0) {
-      formData.append("file", fileInput.files[0]);
-    }
+    const formData = new FormData(form);
 
     try {
       const response = await fetch(
@@ -60,3 +40,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
