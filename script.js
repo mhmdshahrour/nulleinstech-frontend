@@ -1,3 +1,4 @@
+alert("script.js is running");
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("contactForm");
   const status = document.getElementById("status");
